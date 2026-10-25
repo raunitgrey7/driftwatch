@@ -148,7 +148,8 @@ numbers here):
   constant.
 * **Level error**: mean absolute difference from the expected AUC; also
   reported against the realised AUC of the batch's 400 labels, which adds
-  sampling noise of about 0.035.
+  the sampling noise of 400 outcomes (on control streams the naive estimate
+  is 0.0105 from the expected AUC but 0.0345 from the realised one).
 * **Change error**: `|(CBPE_t - CBPE_ref) - (expected_t - expected_ref)|`, the
   error in the estimated change since the reference period; the naive change
   error is `|expected_t - expected_ref|`. A constant level bias cancels here,

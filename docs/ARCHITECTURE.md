@@ -63,8 +63,8 @@ Stephens-corrected Kolmogorov p-value, chi-square of homogeneity, PSI,
 midrank AUC, the ratio-of-expectations AUC under per-row probabilities (the
 core of CBPE), DeLong's paired AUC variance, the normal-mixture confidence
 sequence and a Gamma fit for the MMD null. p-values use `scipy.special`
-ufuncs, not `scipy.stats` distribution objects, whose per-call overhead was
-a third of the batch cost.
+ufuncs, not `scipy.stats` distribution objects, whose per-call overhead stood
+out in profiles of the batch loop.
 
 ### `driftwatch.detectors`
 

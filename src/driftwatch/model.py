@@ -5,9 +5,10 @@ next to logistic scorecards. It handles missing values natively, which
 matters here because data-quality incidents are part of the stream: a null
 bureau score is routed down a learned branch instead of being imputed.
 Categories enter as vocabulary codes (unknown values become missing): with
-six or fewer levels the trees isolate them with ordinary splits, the
-measured AUC matches native categorical support, and prediction skips the
-library's per-call encoder, which was a third of the monitor's batch cost. Platt
+six or fewer levels the trees isolate them with ordinary splits, the AUC
+matched native categorical support in a development comparison, and
+prediction skips the library's per-call encoder, which stood out in profiles
+of the monitor's batch loop. Platt
 scaling on a held-out calibration slice makes the probabilities calibrated on
 the reference period, which the confidence-based performance estimator
 relies on. The approval cut-off is fixed at training time as the PD quantile

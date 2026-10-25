@@ -76,8 +76,8 @@ make replay       # second shell: streams a concept-drift scenario into the serv
 ```
 
 Open http://127.0.0.1:8774 for the dashboard. On first start the service
-trains the reference model on a seeded clean history (under a second) and
-registers it as version 1. `make lint` and `make test` run ruff, the house
+trains the reference model on a seeded clean history and registers it as
+version 1, which takes a few seconds. `make lint` and `make test` run ruff, the house
 text rules and the test suite.
 
 ## Measured results

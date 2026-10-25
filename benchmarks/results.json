@@ -36,8 +36,8 @@
     "numpy": "2.5.4",
     "scipy": "1.18.1",
     "scikit_learn": "1.9.1",
-    "commit": "de5c902",
-    "generated_at": "2026-10-25T05:40:05+00:00"
+    "commit": "01efb52",
+    "generated_at": "2026-10-25T05:46:54+00:00"
   },
   "champion": {
     "train_rows": 16000,
@@ -931,10 +931,10 @@
     }
   },
   "timing": {
-    "total_seconds": 136.0,
-    "task_seconds": 269.5,
+    "total_seconds": 161.5,
+    "task_seconds": 319.9,
     "batches_monitored": 34000,
-    "monitor_ms_per_batch": 4.509
+    "monitor_ms_per_batch": 5.253
   },
   "headline": {
     "champion.train_rows": 16000,
