@@ -13,7 +13,10 @@ suspected and to catch what it cannot see (concept drift).
   alone does not trip it, while concept drift and prior shift do.
 * ``DDM`` (Gama et al. 2004) watches the error rate of the credit decision
   with the classic warning (2 sigma) and drift (3 sigma) levels over the
-  running minimum, evaluated instance by instance in vectorised form.
+  running minimum, evaluated instance by instance in vectorised form. The
+  minimum is only tracked after a burn-in of 4,000 instances (ten batches),
+  because a minimum taken over the first few hundred rows is mostly noise
+  and was the source of every early false alarm in the first benchmark run.
 * ``LabelRate`` tests each labelled batch's default rate against the
   reference rate with a two-sided binomial test.
 """
@@ -96,7 +99,7 @@ class DDM:
 
     warning_level: float = 2.0
     drift_level: float = 3.0
-    min_instances: int = 1000
+    min_instances: int = 4000
     _n: int = 0
     _errors: float = 0.0
     _ps_min: float = math.inf

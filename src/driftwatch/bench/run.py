@@ -9,6 +9,7 @@ configuration gives the same metrics with one worker or two.
 
 from __future__ import annotations
 
+import logging
 import multiprocessing
 import os
 import platform
@@ -109,14 +110,16 @@ def run_task(task: Task) -> Summary:
 
 
 def _init_worker() -> None:
+    """One BLAS and OpenMP thread per worker; rollouts and retrains are expected events, not news."""
     threadpool_limits(1)
+    logging.getLogger("driftwatch").setLevel(logging.ERROR)
 
 
 def run_all(tasks: list[Task], workers: int) -> list[Summary]:
     """Run tasks in order; with more than one worker, on a spawn-context process pool."""
     if workers <= 1:
-        with threadpool_limits(1):
-            return [run_task(t) for t in tasks]
+        _init_worker()
+        return [run_task(t) for t in tasks]
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     context = multiprocessing.get_context("spawn")
     with ProcessPoolExecutor(max_workers=workers, mp_context=context, initializer=_init_worker) as pool:

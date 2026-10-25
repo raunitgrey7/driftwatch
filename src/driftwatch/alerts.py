@@ -16,6 +16,12 @@ decides which fired signals become alerts:
 
 Keys are (category, scope), so drift on ``bureau_score`` does not hide drift
 on ``monthly_income``.
+
+DDM is advisory by default: its signals are kept for the timeline but do not
+open alerts. On stationary streams its 3-sigma rule over a running minimum
+fires falsely on a sizeable share of long streams, and in this benchmark it
+detected nothing the other detectors missed (docs/EVALUATION.md has the
+numbers); ADWIN carries the label-based performance alerts.
 """
 
 from __future__ import annotations
@@ -105,12 +111,16 @@ DEFAULT_RULES: dict[Category, Rule] = {
 }
 
 
+ADVISORY: frozenset[str] = frozenset({"ddm"})
+
+
 @dataclass
 class AlertPolicy:
-    """Stateful filter from fired signals to alerts."""
+    """Stateful filter from fired signals to alerts; ``advisory`` detectors are recorded but never page."""
 
     rules: dict[Category, Rule] = field(default_factory=lambda: dict(DEFAULT_RULES))
     suppress_explained_drift: bool = True
+    advisory: frozenset[str] = ADVISORY
     _history: dict[tuple[Category, str], deque[bool]] = field(default_factory=dict)
     _last_alert: dict[tuple[Category, str], int] = field(default_factory=dict)
     suppressed: int = 0
@@ -123,7 +133,8 @@ class AlertPolicy:
         """Update the per-key history with this evaluation and return the alerts it opens."""
         grouped: dict[tuple[Category, str], list[Signal]] = {}
         for signal in signals:
-            grouped.setdefault((signal.category, signal.scope), []).append(signal)
+            if signal.detector not in self.advisory:
+                grouped.setdefault((signal.category, signal.scope), []).append(signal)
         alerts: list[Alert] = []
         for key in sorted(grouped, key=lambda k: (list(Category).index(k[0]), k[1])):
             category, scope = key

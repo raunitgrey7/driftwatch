@@ -29,7 +29,7 @@ from pathlib import Path
 
 import numpy as np
 
-from driftwatch.bench.detection import champion_for
+from driftwatch.bench.detection import NEVER, champion_for
 from driftwatch.data.scenarios import CreditStream, StreamConfig
 from driftwatch.deploy.retrain import row_log_loss
 from driftwatch.loop import ControlLoop, LoopConfig, ModelBundle, RetrainOutcome
@@ -157,6 +157,12 @@ def run_retrain(task: RetrainTask) -> RetrainSummary:
     return summary
 
 
+def _onset_to_production(promoted: list[RetrainSummary]) -> float | None:
+    """Median batches from drift onset to the retrained model in production; none for control."""
+    delays = [s.promoted_at - s.task.onset for s in promoted if s.promoted_at is not None and s.task.onset < NEVER]
+    return float(np.median(delays)) if delays else None
+
+
 def _mean(values: list[float]) -> float | None:
     return round(float(np.mean(values)), 6) if values else None
 
@@ -182,9 +188,7 @@ def retrain_metrics(summaries: list[RetrainSummary]) -> dict[str, object]:
             "forced_promote_rate": sum(g.promote for g in forced) / len(forced) if forced else None,
             "forced_correct_rate": sum(g.correct for g in forced) / len(forced) if forced else None,
             "runs_with_new_production": len(promoted),
-            "batches_onset_to_production_median": float(np.median([s.promoted_at - s.task.onset for s in promoted]))
-            if promoted
-            else None,
+            "batches_onset_to_production_median": _onset_to_production(promoted),
             "true_auc_lift_after_promotion_mean": _mean(lifts),
             "true_logloss_gain_after_promotion_mean": _mean(gains),
         }

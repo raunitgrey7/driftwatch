@@ -1,0 +1,1149 @@
+{
+  "config": {
+    "seed": 2026,
+    "workers": 2,
+    "batch_size": 400,
+    "label_delay": 30,
+    "history": {
+      "seed": 7,
+      "n_batches": 60,
+      "batch_size": 400,
+      "train_batches": 40,
+      "calib_batches": 10
+    },
+    "control_streams": 25,
+    "control_batches": 400,
+    "drift_seeds": 10,
+    "drift_batches": 240,
+    "onset_range": [
+      100,
+      140
+    ],
+    "detection_window": 80,
+    "release_instances": 4,
+    "release_streams": 3,
+    "rollout_batches": 220,
+    "retrain_seeds": 6,
+    "retrain_batches": 300,
+    "retrain_onset": 80,
+    "forced_retrain_at": 150,
+    "truth_batches": 20
+  },
+  "environment": {
+    "python": "3.13.17",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "cpus": 15,
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit_learn": "1.9.1",
+    "commit": "a349a6d",
+    "generated_at": "2026-10-25T05:03:26+00:00"
+  },
+  "detection": {
+    "control": {
+      "streams": 25,
+      "batches": 10000,
+      "alerts": 2,
+      "false_alarms_per_10k": 2.0,
+      "alerts_by_category": {
+        "performance": 2
+      },
+      "raw_fires_per_10k": {
+        "cbpe": 40.0,
+        "chi2": 7.0,
+        "ddm": 2.0,
+        "ks": 4.0,
+        "label_rate": 12.0,
+        "mmd": 31.0,
+        "score_ks": 9.0
+      },
+      "estimation": {
+        "auc_cbpe_bias": 0.015714,
+        "auc_cbpe_vs_expected": 0.015722,
+        "auc_cbpe_vs_realized": 0.03551,
+        "auc_change_cbpe": 0.004605,
+        "auc_change_naive": 0.008526,
+        "auc_naive_vs_expected": 0.010524,
+        "auc_naive_vs_realized": 0.034517,
+        "rate_em_vs_realized": 0.028572,
+        "rate_em_vs_true": 0.026899,
+        "rate_meanpd_vs_realized": 0.01017,
+        "rate_meanpd_vs_true": 0.002076
+      }
+    },
+    "drift": {
+      "concept_abrupt": {
+        "family": "concept",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 0.8333333333333334,
+        "false_alarms_before_onset": 2,
+        "delay_median": 32.0,
+        "delay_p90": 33.1,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "adwin": {
+            "recall": 1.0,
+            "delay_median": 32.0
+          },
+          "cbpe": {
+            "recall": 0.5,
+            "delay_median": 14.0
+          },
+          "chi2": {
+            "recall": 0.2,
+            "delay_median": 72.0
+          },
+          "ddm": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "ks": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "label_rate": {
+            "recall": 1.0,
+            "delay_median": 31.0
+          },
+          "mmd": {
+            "recall": 0.1,
+            "delay_median": 25.0
+          },
+          "score_ks": {
+            "recall": 0.0,
+            "delay_median": null
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.041027,
+          "auc_cbpe_vs_expected": 0.04103,
+          "auc_cbpe_vs_realized": 0.043628,
+          "auc_change_cbpe": 0.025483,
+          "auc_change_naive": 0.027718,
+          "auc_naive_vs_expected": 0.033174,
+          "auc_naive_vs_realized": 0.038574,
+          "rate_em_vs_realized": 0.043552,
+          "rate_em_vs_true": 0.042872,
+          "rate_meanpd_vs_realized": 0.044881,
+          "rate_meanpd_vs_true": 0.045311
+        }
+      },
+      "concept_gradual": {
+        "family": "concept",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 1.0,
+        "false_alarms_before_onset": 0,
+        "delay_median": 53.5,
+        "delay_p90": 56.1,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "adwin": {
+            "recall": 1.0,
+            "delay_median": 53.5
+          },
+          "cbpe": {
+            "recall": 0.1,
+            "delay_median": 42.0
+          },
+          "chi2": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "ddm": {
+            "recall": 0.1,
+            "delay_median": 76.0
+          },
+          "label_rate": {
+            "recall": 1.0,
+            "delay_median": 57.0
+          },
+          "mmd": {
+            "recall": 0.1,
+            "delay_median": 52.0
+          },
+          "score_ks": {
+            "recall": 0.0,
+            "delay_median": null
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.03649,
+          "auc_cbpe_vs_expected": 0.036504,
+          "auc_cbpe_vs_realized": 0.044129,
+          "auc_change_cbpe": 0.021663,
+          "auc_change_naive": 0.024462,
+          "auc_naive_vs_expected": 0.029313,
+          "auc_naive_vs_realized": 0.039984,
+          "rate_em_vs_realized": 0.040916,
+          "rate_em_vs_true": 0.039854,
+          "rate_meanpd_vs_realized": 0.038201,
+          "rate_meanpd_vs_true": 0.037372
+        }
+      },
+      "covariate_abrupt": {
+        "family": "covariate",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 0.9090909090909091,
+        "false_alarms_before_onset": 1,
+        "delay_median": 1.0,
+        "delay_p90": 1.0,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "adwin": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "cbpe": {
+            "recall": 1.0,
+            "delay_median": 1.0
+          },
+          "chi2": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "ddm": {
+            "recall": 1.0,
+            "delay_median": 35.0
+          },
+          "ks": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "label_rate": {
+            "recall": 1.0,
+            "delay_median": 33.5
+          },
+          "mmd": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "psi": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "score_ks": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.019566,
+          "auc_cbpe_vs_expected": 0.019566,
+          "auc_cbpe_vs_realized": 0.034279,
+          "auc_change_cbpe": 0.005525,
+          "auc_change_naive": 0.035678,
+          "auc_naive_vs_expected": 0.041294,
+          "auc_naive_vs_realized": 0.047002,
+          "rate_em_vs_realized": 0.288626,
+          "rate_em_vs_true": 0.288476,
+          "rate_meanpd_vs_realized": 0.011859,
+          "rate_meanpd_vs_true": 0.003604
+        }
+      },
+      "covariate_gradual": {
+        "family": "covariate",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 0.9090909090909091,
+        "false_alarms_before_onset": 1,
+        "delay_median": 11.0,
+        "delay_p90": 13.0,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "cbpe": {
+            "recall": 1.0,
+            "delay_median": 21.0
+          },
+          "chi2": {
+            "recall": 1.0,
+            "delay_median": 9.0
+          },
+          "ddm": {
+            "recall": 1.0,
+            "delay_median": 54.5
+          },
+          "ks": {
+            "recall": 1.0,
+            "delay_median": 13.0
+          },
+          "label_rate": {
+            "recall": 1.0,
+            "delay_median": 60.0
+          },
+          "mmd": {
+            "recall": 1.0,
+            "delay_median": 10.0
+          },
+          "psi": {
+            "recall": 1.0,
+            "delay_median": 27.0
+          },
+          "score_ks": {
+            "recall": 1.0,
+            "delay_median": 15.5
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.019184,
+          "auc_cbpe_vs_expected": 0.019184,
+          "auc_cbpe_vs_realized": 0.033664,
+          "auc_change_cbpe": 0.005559,
+          "auc_change_naive": 0.030694,
+          "auc_naive_vs_expected": 0.036085,
+          "auc_naive_vs_realized": 0.042885,
+          "rate_em_vs_realized": 0.232366,
+          "rate_em_vs_true": 0.231758,
+          "rate_meanpd_vs_realized": 0.012007,
+          "rate_meanpd_vs_true": 0.003088
+        }
+      },
+      "covariate_subtle": {
+        "family": "covariate",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 0.9090909090909091,
+        "false_alarms_before_onset": 1,
+        "delay_median": 1.5,
+        "delay_p90": 2.0,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "cbpe": {
+            "recall": 0.9,
+            "delay_median": 12.0
+          },
+          "chi2": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "ddm": {
+            "recall": 0.5,
+            "delay_median": 61.0
+          },
+          "ks": {
+            "recall": 1.0,
+            "delay_median": 1.0
+          },
+          "label_rate": {
+            "recall": 0.2,
+            "delay_median": 54.0
+          },
+          "mmd": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "score_ks": {
+            "recall": 1.0,
+            "delay_median": 3.5
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.016711,
+          "auc_cbpe_vs_expected": 0.016714,
+          "auc_cbpe_vs_realized": 0.034151,
+          "auc_change_cbpe": 0.004674,
+          "auc_change_naive": 0.013024,
+          "auc_naive_vs_expected": 0.01777,
+          "auc_naive_vs_realized": 0.034803,
+          "rate_em_vs_realized": 0.064084,
+          "rate_em_vs_true": 0.063261,
+          "rate_meanpd_vs_realized": 0.010454,
+          "rate_meanpd_vs_true": 0.001903
+        }
+      },
+      "dq_new_category": {
+        "family": "quality",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 0.9090909090909091,
+        "false_alarms_before_onset": 1,
+        "delay_median": 0.0,
+        "delay_p90": 0.0,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "cbpe": {
+            "recall": 0.6,
+            "delay_median": 24.5
+          },
+          "chi2": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "ddm": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "ks": {
+            "recall": 0.1,
+            "delay_median": 77.0
+          },
+          "label_rate": {
+            "recall": 0.1,
+            "delay_median": 33.0
+          },
+          "mmd": {
+            "recall": 0.1,
+            "delay_median": 77.0
+          },
+          "psi": {
+            "recall": 0.3,
+            "delay_median": 40.0
+          },
+          "score_ks": {
+            "recall": 0.4,
+            "delay_median": 46.0
+          },
+          "unseen_category": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.014867,
+          "auc_cbpe_vs_expected": 0.014921,
+          "auc_cbpe_vs_realized": 0.035701,
+          "auc_change_cbpe": 0.004966,
+          "auc_change_naive": 0.009036,
+          "auc_naive_vs_expected": 0.011207,
+          "auc_naive_vs_realized": 0.035405,
+          "rate_em_vs_realized": 0.029867,
+          "rate_em_vs_true": 0.028675,
+          "rate_meanpd_vs_realized": 0.010499,
+          "rate_meanpd_vs_true": 0.002496
+        }
+      },
+      "dq_nulls": {
+        "family": "quality",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 0.9090909090909091,
+        "false_alarms_before_onset": 1,
+        "delay_median": 0.0,
+        "delay_p90": 0.0,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "adwin": {
+            "recall": 0.9,
+            "delay_median": 55.0
+          },
+          "cbpe": {
+            "recall": 1.0,
+            "delay_median": 1.5
+          },
+          "chi2": {
+            "recall": 0.1,
+            "delay_median": 4.0
+          },
+          "ddm": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "ks": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "label_rate": {
+            "recall": 0.1,
+            "delay_median": 20.0
+          },
+          "mmd": {
+            "recall": 0.3,
+            "delay_median": 39.0
+          },
+          "null_rate": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "score_ks": {
+            "recall": 1.0,
+            "delay_median": 1.0
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.024951,
+          "auc_cbpe_vs_expected": 0.024969,
+          "auc_cbpe_vs_realized": 0.038104,
+          "auc_change_cbpe": 0.010498,
+          "auc_change_naive": 0.031099,
+          "auc_naive_vs_expected": 0.03668,
+          "auc_naive_vs_realized": 0.044409,
+          "rate_em_vs_realized": 0.065641,
+          "rate_em_vs_true": 0.065974,
+          "rate_meanpd_vs_realized": 0.013658,
+          "rate_meanpd_vs_true": 0.011283
+        }
+      },
+      "dq_schema_break": {
+        "family": "quality",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 0.8333333333333334,
+        "false_alarms_before_onset": 2,
+        "delay_median": 0.0,
+        "delay_p90": 0.0,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "adwin": {
+            "recall": 0.4,
+            "delay_median": 65.0
+          },
+          "cbpe": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "ddm": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "label_rate": {
+            "recall": 0.1,
+            "delay_median": 41.0
+          },
+          "mmd": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "null_rate": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "schema": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "score_ks": {
+            "recall": 0.8,
+            "delay_median": 24.0
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": -0.006277,
+          "auc_cbpe_vs_expected": 0.007404,
+          "auc_cbpe_vs_realized": 0.034764,
+          "auc_change_cbpe": 0.021986,
+          "auc_change_naive": 0.01035,
+          "auc_naive_vs_expected": 0.013941,
+          "auc_naive_vs_realized": 0.035579,
+          "rate_em_vs_realized": 0.059433,
+          "rate_em_vs_true": 0.058992,
+          "rate_meanpd_vs_realized": 0.012191,
+          "rate_meanpd_vs_true": 0.007515
+        }
+      },
+      "dq_unit_change": {
+        "family": "quality",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 1.0,
+        "false_alarms_before_onset": 0,
+        "delay_median": 0.0,
+        "delay_p90": 0.0,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "adwin": {
+            "recall": 1.0,
+            "delay_median": 32.5
+          },
+          "cbpe": {
+            "recall": 1.0,
+            "delay_median": 3.0
+          },
+          "chi2": {
+            "recall": 0.2,
+            "delay_median": 46.5
+          },
+          "ks": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "label_rate": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "mmd": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "psi": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "range": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "score_ks": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          },
+          "unit_change": {
+            "recall": 1.0,
+            "delay_median": 0.0
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.007764,
+          "auc_cbpe_vs_expected": 0.008839,
+          "auc_cbpe_vs_realized": 0.034506,
+          "auc_change_cbpe": 0.008906,
+          "auc_change_naive": 0.0115,
+          "auc_naive_vs_expected": 0.015446,
+          "auc_naive_vs_realized": 0.036418,
+          "rate_em_vs_realized": 0.079,
+          "rate_em_vs_true": 0.079637,
+          "rate_meanpd_vs_realized": 0.041159,
+          "rate_meanpd_vs_true": 0.041797
+        }
+      },
+      "prior_shift": {
+        "family": "prior",
+        "streams": 10,
+        "recall": 1.0,
+        "precision": 1.0,
+        "false_alarms_before_onset": 0,
+        "delay_median": 32.0,
+        "delay_p90": 33.1,
+        "diagnosis_rate": 1.0,
+        "raw": {
+          "adwin": {
+            "recall": 1.0,
+            "delay_median": 32.0
+          },
+          "cbpe": {
+            "recall": 0.0,
+            "delay_median": null
+          },
+          "ddm": {
+            "recall": 0.2,
+            "delay_median": 40.5
+          },
+          "label_rate": {
+            "recall": 1.0,
+            "delay_median": 30.5
+          },
+          "mmd": {
+            "recall": 0.5,
+            "delay_median": 55.0
+          },
+          "score_ks": {
+            "recall": 0.4,
+            "delay_median": 35.5
+          }
+        },
+        "estimation_post_onset": {
+          "auc_cbpe_bias": 0.021977,
+          "auc_cbpe_vs_expected": 0.021977,
+          "auc_cbpe_vs_realized": 0.030438,
+          "auc_change_cbpe": 0.006839,
+          "auc_change_naive": 0.007814,
+          "auc_naive_vs_expected": 0.009953,
+          "auc_naive_vs_realized": 0.026682,
+          "rate_em_vs_realized": 0.030587,
+          "rate_em_vs_true": 0.027633,
+          "rate_meanpd_vs_realized": 0.051194,
+          "rate_meanpd_vs_true": 0.050966
+        }
+      }
+    }
+  },
+  "deployment": {
+    "per_kind": {
+      "inverted_score": {
+        "class": "bad",
+        "runs": 12,
+        "rolled_back_rate": 1.0,
+        "promoted_rate": 0.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 1.0,
+        "exposure_median": 0.0,
+        "exposure_max": 0,
+        "excess_defaults_approved_mean": 0.0,
+        "release_true_auc_mean": 0.215,
+        "guardrails": {
+          "rank_agreement": 12
+        }
+      },
+      "unit_bug": {
+        "class": "bad",
+        "runs": 12,
+        "rolled_back_rate": 1.0,
+        "promoted_rate": 0.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 1.5,
+        "exposure_median": 0.0,
+        "exposure_max": 175,
+        "excess_defaults_approved_mean": -0.25,
+        "release_true_auc_mean": 0.7737,
+        "guardrails": {
+          "approval_rate": 12
+        }
+      },
+      "miscalibrated": {
+        "class": "bad",
+        "runs": 12,
+        "rolled_back_rate": 1.0,
+        "promoted_rate": 0.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 1.0,
+        "exposure_median": 0.0,
+        "exposure_max": 0,
+        "excess_defaults_approved_mean": 0.0,
+        "release_true_auc_mean": 0.7849,
+        "guardrails": {
+          "approval_rate": 12
+        }
+      },
+      "crash_5pct": {
+        "class": "bad",
+        "runs": 12,
+        "rolled_back_rate": 1.0,
+        "promoted_rate": 0.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 1.0,
+        "exposure_median": 0.0,
+        "exposure_max": 0,
+        "excess_defaults_approved_mean": 0.0,
+        "release_true_auc_mean": 0.7842,
+        "guardrails": {
+          "runtime": 12
+        }
+      },
+      "no_bureau": {
+        "class": "bad",
+        "runs": 12,
+        "rolled_back_rate": 1.0,
+        "promoted_rate": 0.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 2.0,
+        "exposure_median": 0.0,
+        "exposure_max": 167,
+        "excess_defaults_approved_mean": 0.08333333333333333,
+        "release_true_auc_mean": 0.6905,
+        "guardrails": {
+          "rank_agreement": 12
+        }
+      },
+      "small_sample": {
+        "class": "bad",
+        "runs": 12,
+        "rolled_back_rate": 1.0,
+        "promoted_rate": 0.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 40.0,
+        "exposure_median": 702.5,
+        "exposure_max": 822,
+        "excess_defaults_approved_mean": 1.25,
+        "release_true_auc_mean": 0.7419,
+        "guardrails": {
+          "discrimination": 12
+        }
+      },
+      "retrain_same": {
+        "class": "good",
+        "runs": 12,
+        "rolled_back_rate": 0.0,
+        "promoted_rate": 1.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 76.0,
+        "exposure_median": 3026.0,
+        "exposure_max": 4219,
+        "excess_defaults_approved_mean": -0.8333333333333334,
+        "release_true_auc_mean": 0.785,
+        "guardrails": {
+          "promoted": 12
+        }
+      },
+      "retrain_more": {
+        "class": "good",
+        "runs": 12,
+        "rolled_back_rate": 0.0,
+        "promoted_rate": 1.0,
+        "registry_correct_rate": 1.0,
+        "batches_to_decision_median": 56.0,
+        "exposure_median": 2345.5,
+        "exposure_max": 2650,
+        "excess_defaults_approved_mean": -3.3333333333333335,
+        "release_true_auc_mean": 0.7908,
+        "guardrails": {
+          "promoted": 12
+        }
+      }
+    },
+    "pooled": {
+      "bad_runs": 72,
+      "bad_rollback_rate": 1.0,
+      "good_runs": 24,
+      "good_promotion_rate": 1.0,
+      "false_rollback_rate": 0.0,
+      "registry_correct_rate": 1.0
+    }
+  },
+  "retraining": {
+    "per_scenario": {
+      "concept_abrupt": {
+        "runs": 6,
+        "triggered_retrains_per_run": 1.0,
+        "gate_promote_rate": 1.0,
+        "gate_correct_rate": 1.0,
+        "forced_retrains": 0,
+        "forced_promote_rate": null,
+        "forced_correct_rate": null,
+        "runs_with_new_production": 6,
+        "batches_onset_to_production_median": 97.5,
+        "true_auc_lift_after_promotion_mean": 0.056036,
+        "true_logloss_gain_after_promotion_mean": 0.04257
+      },
+      "concept_gradual": {
+        "runs": 6,
+        "triggered_retrains_per_run": 1.1666666666666667,
+        "gate_promote_rate": 0.8571428571428571,
+        "gate_correct_rate": 1.0,
+        "forced_retrains": 0,
+        "forced_promote_rate": null,
+        "forced_correct_rate": null,
+        "runs_with_new_production": 6,
+        "batches_onset_to_production_median": 121.0,
+        "true_auc_lift_after_promotion_mean": 0.050402,
+        "true_logloss_gain_after_promotion_mean": 0.039584
+      },
+      "control": {
+        "runs": 6,
+        "triggered_retrains_per_run": 0.3333333333333333,
+        "gate_promote_rate": 0.0,
+        "gate_correct_rate": 1.0,
+        "forced_retrains": 6,
+        "forced_promote_rate": 0.16666666666666666,
+        "forced_correct_rate": 1.0,
+        "runs_with_new_production": 1,
+        "batches_onset_to_production_median": -999999804.0,
+        "true_auc_lift_after_promotion_mean": -1e-06,
+        "true_logloss_gain_after_promotion_mean": 0.000251
+      },
+      "covariate_abrupt": {
+        "runs": 6,
+        "triggered_retrains_per_run": 3.0,
+        "gate_promote_rate": 0.0,
+        "gate_correct_rate": 1.0,
+        "forced_retrains": 0,
+        "forced_promote_rate": null,
+        "forced_correct_rate": null,
+        "runs_with_new_production": 0,
+        "batches_onset_to_production_median": null,
+        "true_auc_lift_after_promotion_mean": null,
+        "true_logloss_gain_after_promotion_mean": null
+      },
+      "dq_unit_change": {
+        "runs": 6,
+        "triggered_retrains_per_run": 0.0,
+        "gate_promote_rate": null,
+        "gate_correct_rate": null,
+        "forced_retrains": 0,
+        "forced_promote_rate": null,
+        "forced_correct_rate": null,
+        "runs_with_new_production": 0,
+        "batches_onset_to_production_median": null,
+        "true_auc_lift_after_promotion_mean": null,
+        "true_logloss_gain_after_promotion_mean": null
+      },
+      "prior_shift": {
+        "runs": 6,
+        "triggered_retrains_per_run": 1.0,
+        "gate_promote_rate": 1.0,
+        "gate_correct_rate": 1.0,
+        "forced_retrains": 0,
+        "forced_promote_rate": null,
+        "forced_correct_rate": null,
+        "runs_with_new_production": 6,
+        "batches_onset_to_production_median": 97.5,
+        "true_auc_lift_after_promotion_mean": -5.1e-05,
+        "true_logloss_gain_after_promotion_mean": 0.016338
+      }
+    },
+    "pooled": {
+      "gate_decisions": 45,
+      "gate_correct_rate": 1.0,
+      "gate_promotions": 19,
+      "gate_should_promote": 18
+    }
+  },
+  "timing": {
+    "total_seconds": 112.8,
+    "task_seconds": 224.0,
+    "batches_monitored": 34000,
+    "monitor_ms_per_batch": 3.713
+  },
+  "headline": {
+    "control.false_alarms_per_10k": 2.0,
+    "control.batches": 10000,
+    "detection.concept_abrupt.recall": 1.0,
+    "detection.concept_abrupt.precision": 0.8333333333333334,
+    "detection.concept_abrupt.delay_median": 32.0,
+    "detection.concept_abrupt.delay_p90": 33.1,
+    "detection.concept_abrupt.diagnosis_rate": 1.0,
+    "estimation.concept_abrupt.auc_cbpe_bias": 0.041027,
+    "estimation.concept_abrupt.auc_cbpe_vs_expected": 0.04103,
+    "estimation.concept_abrupt.auc_cbpe_vs_realized": 0.043628,
+    "estimation.concept_abrupt.auc_change_cbpe": 0.025483,
+    "estimation.concept_abrupt.auc_change_naive": 0.027718,
+    "estimation.concept_abrupt.auc_naive_vs_expected": 0.033174,
+    "estimation.concept_abrupt.auc_naive_vs_realized": 0.038574,
+    "estimation.concept_abrupt.rate_em_vs_realized": 0.043552,
+    "estimation.concept_abrupt.rate_em_vs_true": 0.042872,
+    "estimation.concept_abrupt.rate_meanpd_vs_realized": 0.044881,
+    "estimation.concept_abrupt.rate_meanpd_vs_true": 0.045311,
+    "detection.concept_gradual.recall": 1.0,
+    "detection.concept_gradual.precision": 1.0,
+    "detection.concept_gradual.delay_median": 53.5,
+    "detection.concept_gradual.delay_p90": 56.1,
+    "detection.concept_gradual.diagnosis_rate": 1.0,
+    "estimation.concept_gradual.auc_cbpe_bias": 0.03649,
+    "estimation.concept_gradual.auc_cbpe_vs_expected": 0.036504,
+    "estimation.concept_gradual.auc_cbpe_vs_realized": 0.044129,
+    "estimation.concept_gradual.auc_change_cbpe": 0.021663,
+    "estimation.concept_gradual.auc_change_naive": 0.024462,
+    "estimation.concept_gradual.auc_naive_vs_expected": 0.029313,
+    "estimation.concept_gradual.auc_naive_vs_realized": 0.039984,
+    "estimation.concept_gradual.rate_em_vs_realized": 0.040916,
+    "estimation.concept_gradual.rate_em_vs_true": 0.039854,
+    "estimation.concept_gradual.rate_meanpd_vs_realized": 0.038201,
+    "estimation.concept_gradual.rate_meanpd_vs_true": 0.037372,
+    "detection.covariate_abrupt.recall": 1.0,
+    "detection.covariate_abrupt.precision": 0.9090909090909091,
+    "detection.covariate_abrupt.delay_median": 1.0,
+    "detection.covariate_abrupt.delay_p90": 1.0,
+    "detection.covariate_abrupt.diagnosis_rate": 1.0,
+    "estimation.covariate_abrupt.auc_cbpe_bias": 0.019566,
+    "estimation.covariate_abrupt.auc_cbpe_vs_expected": 0.019566,
+    "estimation.covariate_abrupt.auc_cbpe_vs_realized": 0.034279,
+    "estimation.covariate_abrupt.auc_change_cbpe": 0.005525,
+    "estimation.covariate_abrupt.auc_change_naive": 0.035678,
+    "estimation.covariate_abrupt.auc_naive_vs_expected": 0.041294,
+    "estimation.covariate_abrupt.auc_naive_vs_realized": 0.047002,
+    "estimation.covariate_abrupt.rate_em_vs_realized": 0.288626,
+    "estimation.covariate_abrupt.rate_em_vs_true": 0.288476,
+    "estimation.covariate_abrupt.rate_meanpd_vs_realized": 0.011859,
+    "estimation.covariate_abrupt.rate_meanpd_vs_true": 0.003604,
+    "detection.covariate_gradual.recall": 1.0,
+    "detection.covariate_gradual.precision": 0.9090909090909091,
+    "detection.covariate_gradual.delay_median": 11.0,
+    "detection.covariate_gradual.delay_p90": 13.0,
+    "detection.covariate_gradual.diagnosis_rate": 1.0,
+    "estimation.covariate_gradual.auc_cbpe_bias": 0.019184,
+    "estimation.covariate_gradual.auc_cbpe_vs_expected": 0.019184,
+    "estimation.covariate_gradual.auc_cbpe_vs_realized": 0.033664,
+    "estimation.covariate_gradual.auc_change_cbpe": 0.005559,
+    "estimation.covariate_gradual.auc_change_naive": 0.030694,
+    "estimation.covariate_gradual.auc_naive_vs_expected": 0.036085,
+    "estimation.covariate_gradual.auc_naive_vs_realized": 0.042885,
+    "estimation.covariate_gradual.rate_em_vs_realized": 0.232366,
+    "estimation.covariate_gradual.rate_em_vs_true": 0.231758,
+    "estimation.covariate_gradual.rate_meanpd_vs_realized": 0.012007,
+    "estimation.covariate_gradual.rate_meanpd_vs_true": 0.003088,
+    "detection.covariate_subtle.recall": 1.0,
+    "detection.covariate_subtle.precision": 0.9090909090909091,
+    "detection.covariate_subtle.delay_median": 1.5,
+    "detection.covariate_subtle.delay_p90": 2.0,
+    "detection.covariate_subtle.diagnosis_rate": 1.0,
+    "estimation.covariate_subtle.auc_cbpe_bias": 0.016711,
+    "estimation.covariate_subtle.auc_cbpe_vs_expected": 0.016714,
+    "estimation.covariate_subtle.auc_cbpe_vs_realized": 0.034151,
+    "estimation.covariate_subtle.auc_change_cbpe": 0.004674,
+    "estimation.covariate_subtle.auc_change_naive": 0.013024,
+    "estimation.covariate_subtle.auc_naive_vs_expected": 0.01777,
+    "estimation.covariate_subtle.auc_naive_vs_realized": 0.034803,
+    "estimation.covariate_subtle.rate_em_vs_realized": 0.064084,
+    "estimation.covariate_subtle.rate_em_vs_true": 0.063261,
+    "estimation.covariate_subtle.rate_meanpd_vs_realized": 0.010454,
+    "estimation.covariate_subtle.rate_meanpd_vs_true": 0.001903,
+    "detection.dq_new_category.recall": 1.0,
+    "detection.dq_new_category.precision": 0.9090909090909091,
+    "detection.dq_new_category.delay_median": 0.0,
+    "detection.dq_new_category.delay_p90": 0.0,
+    "detection.dq_new_category.diagnosis_rate": 1.0,
+    "estimation.dq_new_category.auc_cbpe_bias": 0.014867,
+    "estimation.dq_new_category.auc_cbpe_vs_expected": 0.014921,
+    "estimation.dq_new_category.auc_cbpe_vs_realized": 0.035701,
+    "estimation.dq_new_category.auc_change_cbpe": 0.004966,
+    "estimation.dq_new_category.auc_change_naive": 0.009036,
+    "estimation.dq_new_category.auc_naive_vs_expected": 0.011207,
+    "estimation.dq_new_category.auc_naive_vs_realized": 0.035405,
+    "estimation.dq_new_category.rate_em_vs_realized": 0.029867,
+    "estimation.dq_new_category.rate_em_vs_true": 0.028675,
+    "estimation.dq_new_category.rate_meanpd_vs_realized": 0.010499,
+    "estimation.dq_new_category.rate_meanpd_vs_true": 0.002496,
+    "detection.dq_nulls.recall": 1.0,
+    "detection.dq_nulls.precision": 0.9090909090909091,
+    "detection.dq_nulls.delay_median": 0.0,
+    "detection.dq_nulls.delay_p90": 0.0,
+    "detection.dq_nulls.diagnosis_rate": 1.0,
+    "estimation.dq_nulls.auc_cbpe_bias": 0.024951,
+    "estimation.dq_nulls.auc_cbpe_vs_expected": 0.024969,
+    "estimation.dq_nulls.auc_cbpe_vs_realized": 0.038104,
+    "estimation.dq_nulls.auc_change_cbpe": 0.010498,
+    "estimation.dq_nulls.auc_change_naive": 0.031099,
+    "estimation.dq_nulls.auc_naive_vs_expected": 0.03668,
+    "estimation.dq_nulls.auc_naive_vs_realized": 0.044409,
+    "estimation.dq_nulls.rate_em_vs_realized": 0.065641,
+    "estimation.dq_nulls.rate_em_vs_true": 0.065974,
+    "estimation.dq_nulls.rate_meanpd_vs_realized": 0.013658,
+    "estimation.dq_nulls.rate_meanpd_vs_true": 0.011283,
+    "detection.dq_schema_break.recall": 1.0,
+    "detection.dq_schema_break.precision": 0.8333333333333334,
+    "detection.dq_schema_break.delay_median": 0.0,
+    "detection.dq_schema_break.delay_p90": 0.0,
+    "detection.dq_schema_break.diagnosis_rate": 1.0,
+    "estimation.dq_schema_break.auc_cbpe_bias": -0.006277,
+    "estimation.dq_schema_break.auc_cbpe_vs_expected": 0.007404,
+    "estimation.dq_schema_break.auc_cbpe_vs_realized": 0.034764,
+    "estimation.dq_schema_break.auc_change_cbpe": 0.021986,
+    "estimation.dq_schema_break.auc_change_naive": 0.01035,
+    "estimation.dq_schema_break.auc_naive_vs_expected": 0.013941,
+    "estimation.dq_schema_break.auc_naive_vs_realized": 0.035579,
+    "estimation.dq_schema_break.rate_em_vs_realized": 0.059433,
+    "estimation.dq_schema_break.rate_em_vs_true": 0.058992,
+    "estimation.dq_schema_break.rate_meanpd_vs_realized": 0.012191,
+    "estimation.dq_schema_break.rate_meanpd_vs_true": 0.007515,
+    "detection.dq_unit_change.recall": 1.0,
+    "detection.dq_unit_change.precision": 1.0,
+    "detection.dq_unit_change.delay_median": 0.0,
+    "detection.dq_unit_change.delay_p90": 0.0,
+    "detection.dq_unit_change.diagnosis_rate": 1.0,
+    "estimation.dq_unit_change.auc_cbpe_bias": 0.007764,
+    "estimation.dq_unit_change.auc_cbpe_vs_expected": 0.008839,
+    "estimation.dq_unit_change.auc_cbpe_vs_realized": 0.034506,
+    "estimation.dq_unit_change.auc_change_cbpe": 0.008906,
+    "estimation.dq_unit_change.auc_change_naive": 0.0115,
+    "estimation.dq_unit_change.auc_naive_vs_expected": 0.015446,
+    "estimation.dq_unit_change.auc_naive_vs_realized": 0.036418,
+    "estimation.dq_unit_change.rate_em_vs_realized": 0.079,
+    "estimation.dq_unit_change.rate_em_vs_true": 0.079637,
+    "estimation.dq_unit_change.rate_meanpd_vs_realized": 0.041159,
+    "estimation.dq_unit_change.rate_meanpd_vs_true": 0.041797,
+    "detection.prior_shift.recall": 1.0,
+    "detection.prior_shift.precision": 1.0,
+    "detection.prior_shift.delay_median": 32.0,
+    "detection.prior_shift.delay_p90": 33.1,
+    "detection.prior_shift.diagnosis_rate": 1.0,
+    "estimation.prior_shift.auc_cbpe_bias": 0.021977,
+    "estimation.prior_shift.auc_cbpe_vs_expected": 0.021977,
+    "estimation.prior_shift.auc_cbpe_vs_realized": 0.030438,
+    "estimation.prior_shift.auc_change_cbpe": 0.006839,
+    "estimation.prior_shift.auc_change_naive": 0.007814,
+    "estimation.prior_shift.auc_naive_vs_expected": 0.009953,
+    "estimation.prior_shift.auc_naive_vs_realized": 0.026682,
+    "estimation.prior_shift.rate_em_vs_realized": 0.030587,
+    "estimation.prior_shift.rate_em_vs_true": 0.027633,
+    "estimation.prior_shift.rate_meanpd_vs_realized": 0.051194,
+    "estimation.prior_shift.rate_meanpd_vs_true": 0.050966,
+    "estimation.control.auc_cbpe_bias": 0.015714,
+    "estimation.control.auc_cbpe_vs_expected": 0.015722,
+    "estimation.control.auc_cbpe_vs_realized": 0.03551,
+    "estimation.control.auc_change_cbpe": 0.004605,
+    "estimation.control.auc_change_naive": 0.008526,
+    "estimation.control.auc_naive_vs_expected": 0.010524,
+    "estimation.control.auc_naive_vs_realized": 0.034517,
+    "estimation.control.rate_em_vs_realized": 0.028572,
+    "estimation.control.rate_em_vs_true": 0.026899,
+    "estimation.control.rate_meanpd_vs_realized": 0.01017,
+    "estimation.control.rate_meanpd_vs_true": 0.002076,
+    "deployment.bad_runs": 72,
+    "deployment.bad_rollback_rate": 1.0,
+    "deployment.good_runs": 24,
+    "deployment.good_promotion_rate": 1.0,
+    "deployment.false_rollback_rate": 0.0,
+    "deployment.registry_correct_rate": 1.0,
+    "deployment.inverted_score.rolled_back_rate": 1.0,
+    "deployment.inverted_score.batches_to_decision_median": 1.0,
+    "deployment.inverted_score.exposure_median": 0.0,
+    "deployment.unit_bug.rolled_back_rate": 1.0,
+    "deployment.unit_bug.batches_to_decision_median": 1.5,
+    "deployment.unit_bug.exposure_median": 0.0,
+    "deployment.miscalibrated.rolled_back_rate": 1.0,
+    "deployment.miscalibrated.batches_to_decision_median": 1.0,
+    "deployment.miscalibrated.exposure_median": 0.0,
+    "deployment.crash_5pct.rolled_back_rate": 1.0,
+    "deployment.crash_5pct.batches_to_decision_median": 1.0,
+    "deployment.crash_5pct.exposure_median": 0.0,
+    "deployment.no_bureau.rolled_back_rate": 1.0,
+    "deployment.no_bureau.batches_to_decision_median": 2.0,
+    "deployment.no_bureau.exposure_median": 0.0,
+    "deployment.small_sample.rolled_back_rate": 1.0,
+    "deployment.small_sample.batches_to_decision_median": 40.0,
+    "deployment.small_sample.exposure_median": 702.5,
+    "deployment.retrain_same.rolled_back_rate": 0.0,
+    "deployment.retrain_same.batches_to_decision_median": 76.0,
+    "deployment.retrain_same.exposure_median": 3026.0,
+    "deployment.retrain_more.rolled_back_rate": 0.0,
+    "deployment.retrain_more.batches_to_decision_median": 56.0,
+    "deployment.retrain_more.exposure_median": 2345.5,
+    "retraining.gate_correct_rate": 1.0,
+    "retraining.concept_abrupt.runs": 6,
+    "retraining.concept_abrupt.triggered_retrains_per_run": 1.0,
+    "retraining.concept_abrupt.gate_promote_rate": 1.0,
+    "retraining.concept_abrupt.gate_correct_rate": 1.0,
+    "retraining.concept_abrupt.forced_retrains": 0,
+    "retraining.concept_abrupt.forced_promote_rate": null,
+    "retraining.concept_abrupt.forced_correct_rate": null,
+    "retraining.concept_abrupt.runs_with_new_production": 6,
+    "retraining.concept_abrupt.batches_onset_to_production_median": 97.5,
+    "retraining.concept_abrupt.true_auc_lift_after_promotion_mean": 0.056036,
+    "retraining.concept_abrupt.true_logloss_gain_after_promotion_mean": 0.04257,
+    "retraining.concept_gradual.runs": 6,
+    "retraining.concept_gradual.triggered_retrains_per_run": 1.1666666666666667,
+    "retraining.concept_gradual.gate_promote_rate": 0.8571428571428571,
+    "retraining.concept_gradual.gate_correct_rate": 1.0,
+    "retraining.concept_gradual.forced_retrains": 0,
+    "retraining.concept_gradual.forced_promote_rate": null,
+    "retraining.concept_gradual.forced_correct_rate": null,
+    "retraining.concept_gradual.runs_with_new_production": 6,
+    "retraining.concept_gradual.batches_onset_to_production_median": 121.0,
+    "retraining.concept_gradual.true_auc_lift_after_promotion_mean": 0.050402,
+    "retraining.concept_gradual.true_logloss_gain_after_promotion_mean": 0.039584,
+    "retraining.control.runs": 6,
+    "retraining.control.triggered_retrains_per_run": 0.3333333333333333,
+    "retraining.control.gate_promote_rate": 0.0,
+    "retraining.control.gate_correct_rate": 1.0,
+    "retraining.control.forced_retrains": 6,
+    "retraining.control.forced_promote_rate": 0.16666666666666666,
+    "retraining.control.forced_correct_rate": 1.0,
+    "retraining.control.runs_with_new_production": 1,
+    "retraining.control.batches_onset_to_production_median": -999999804.0,
+    "retraining.control.true_auc_lift_after_promotion_mean": -1e-06,
+    "retraining.control.true_logloss_gain_after_promotion_mean": 0.000251,
+    "retraining.covariate_abrupt.runs": 6,
+    "retraining.covariate_abrupt.triggered_retrains_per_run": 3.0,
+    "retraining.covariate_abrupt.gate_promote_rate": 0.0,
+    "retraining.covariate_abrupt.gate_correct_rate": 1.0,
+    "retraining.covariate_abrupt.forced_retrains": 0,
+    "retraining.covariate_abrupt.forced_promote_rate": null,
+    "retraining.covariate_abrupt.forced_correct_rate": null,
+    "retraining.covariate_abrupt.runs_with_new_production": 0,
+    "retraining.covariate_abrupt.batches_onset_to_production_median": null,
+    "retraining.covariate_abrupt.true_auc_lift_after_promotion_mean": null,
+    "retraining.covariate_abrupt.true_logloss_gain_after_promotion_mean": null,
+    "retraining.dq_unit_change.runs": 6,
+    "retraining.dq_unit_change.triggered_retrains_per_run": 0.0,
+    "retraining.dq_unit_change.gate_promote_rate": null,
+    "retraining.dq_unit_change.gate_correct_rate": null,
+    "retraining.dq_unit_change.forced_retrains": 0,
+    "retraining.dq_unit_change.forced_promote_rate": null,
+    "retraining.dq_unit_change.forced_correct_rate": null,
+    "retraining.dq_unit_change.runs_with_new_production": 0,
+    "retraining.dq_unit_change.batches_onset_to_production_median": null,
+    "retraining.dq_unit_change.true_auc_lift_after_promotion_mean": null,
+    "retraining.dq_unit_change.true_logloss_gain_after_promotion_mean": null,
+    "retraining.prior_shift.runs": 6,
+    "retraining.prior_shift.triggered_retrains_per_run": 1.0,
+    "retraining.prior_shift.gate_promote_rate": 1.0,
+    "retraining.prior_shift.gate_correct_rate": 1.0,
+    "retraining.prior_shift.forced_retrains": 0,
+    "retraining.prior_shift.forced_promote_rate": null,
+    "retraining.prior_shift.forced_correct_rate": null,
+    "retraining.prior_shift.runs_with_new_production": 6,
+    "retraining.prior_shift.batches_onset_to_production_median": 97.5,
+    "retraining.prior_shift.true_auc_lift_after_promotion_mean": -5.1e-05,
+    "retraining.prior_shift.true_logloss_gain_after_promotion_mean": 0.016338
+  }
+}
