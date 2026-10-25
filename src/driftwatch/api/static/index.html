@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>driftwatch</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="bar">
+    <div>
+      <h1>driftwatch</h1>
+      <p class="sub">Credit model monitoring and safe deployment</p>
+    </div>
+    <div class="controls">
+      <label for="api-key">API key</label>
+      <input id="api-key" type="password" autocomplete="off" placeholder="only if APP_API_KEY is set">
+      <button id="theme" type="button" aria-label="Toggle dark mode">Theme</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="tiles" aria-label="Current state">
+      <div class="tile"><span class="label">Production model</span><span class="value" id="t-champion">n/a</span></div>
+      <div class="tile"><span class="label">Rollout</span><span class="value small" id="t-rollout">none</span></div>
+      <div class="tile"><span class="label">Open alerts</span><span class="value" id="t-alerts">0</span></div>
+      <div class="tile"><span class="label">Batches, labelled</span><span class="value small" id="t-batches">0</span></div>
+      <div class="tile"><span class="label">Estimated AUC, latest batch</span><span class="value" id="t-est">n/a</span></div>
+      <div class="tile"><span class="label">Realised AUC, latest labels</span><span class="value" id="t-real">n/a</span></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>AUC per batch: label-free estimate and realised</h2>
+        <button type="button" class="link" id="toggle-table" aria-expanded="false">Show table</button>
+      </div>
+      <p class="note">The estimate (CBPE) exists at decision time; realised AUC appears when the outcomes arrive, one label delay later. The hairline is the estimate's alarm edge.</p>
+      <div class="chart" id="auc-chart" role="img" aria-label="Estimated and realised AUC per batch"></div>
+      <div id="auc-table" class="table-wrap" hidden></div>
+    </section>
+
+    <section class="card">
+      <h2>Approval rate per batch</h2>
+      <div class="chart short" id="approval-chart" role="img" aria-label="Approval rate per batch"></div>
+    </section>
+
+    <section class="card">
+      <h2>Drift by feature: PSI over the last 120 batches</h2>
+      <p class="note">Darker is a larger population stability index (scale capped at 0.5). The top strip marks batches that opened alerts, coloured by the most severe one.</p>
+      <div class="chart" id="heatmap" role="img" aria-label="PSI per feature and batch"></div>
+      <div class="scale" id="heat-scale" aria-hidden="true"></div>
+    </section>
+
+    <div class="grid2">
+      <section class="card">
+        <div class="card-head">
+          <h2>Rollout</h2>
+          <button type="button" class="danger" id="abort" hidden>Roll back candidate</button>
+        </div>
+        <div id="rollout-panel" class="panel">No rollout is running.</div>
+      </section>
+      <section class="card">
+        <h2>Registry and lineage</h2>
+        <div class="table-wrap" id="registry"></div>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>Alerts</h2>
+      <div class="table-wrap" id="alerts"></div>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip" role="status" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

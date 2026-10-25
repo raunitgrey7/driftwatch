@@ -50,6 +50,22 @@ log = logging.getLogger("driftwatch.loop")
 QUALITY = (Category.SCHEMA, Category.DATA_QUALITY)
 
 
+class LoopError(Exception):
+    """Base class for request errors the API maps to HTTP status codes."""
+
+
+class NotFoundError(LoopError):
+    """An unknown batch or version."""
+
+
+class ConflictError(LoopError):
+    """A duplicate batch or label delivery, or a rollout already running."""
+
+
+class InvalidInputError(LoopError):
+    """Input that does not fit the batch it refers to."""
+
+
 @dataclass
 class ModelBundle:
     """What the registry stores per version: the scorer and its monitoring reference."""
@@ -90,6 +106,7 @@ class _Scored:
 class IngestResult:
     index: int
     batch_id: str
+    ids: np.ndarray
     champion_version: int
     candidate_version: int | None
     pd: np.ndarray
@@ -127,7 +144,7 @@ class ControlLoop:
         self.config = config or LoopConfig()
         production = registry.production()
         if production is None:
-            raise RuntimeError("the registry has no production model; use ControlLoop.bootstrap")
+            raise NotFoundError("the registry has no production model; use ControlLoop.bootstrap")
         self._set_champion(production.version)
         self.rollout: Rollout | None = None
         self.candidate_version: int | None = None
@@ -137,7 +154,16 @@ class ControlLoop:
         self.trigger = RetrainTrigger(self.config.retrain)
         self._scores: dict[int, _Scored] = {}
         self.now = store.next_index() - 1
+        self._last_timestamp = ""
         self.retrains: list[RetrainOutcome] = []
+        self._recover_interrupted_rollouts()
+
+    def _recover_interrupted_rollouts(self) -> None:
+        """Roll back candidates left in shadow or canary by a restart; their guardrail state is gone."""
+        for stage in (Stage.SHADOW, Stage.CANARY):
+            for record in self.registry.in_stage(stage):
+                self.registry.rollback(record.version, "service restarted during the rollout")
+                log.warning("rolled back an interrupted rollout", extra={"version": record.version})
 
     @classmethod
     def bootstrap(
@@ -184,9 +210,11 @@ class ControlLoop:
         index = self.store.next_index()
         batch_id = batch_id or f"batch-{index}"
         if self.store.index_of(batch_id) is not None:
-            raise ValueError(f"batch {batch_id!r} was already ingested")
-        self.now = index
+            raise ConflictError(f"batch {batch_id!r} was already ingested")
         batch, issues = coerce(raw)
+        if batch.n_rows == 0:
+            raise InvalidInputError("a batch needs at least one row")
+        self.now, self._last_timestamp = index, timestamp
         champ_pd = self.champion.model.predict_pd(batch)
         report = self.monitor.observe(index, batch, timestamp, scores=champ_pd, issues=issues)
         decisions, served = approve(champ_pd, self.champion.model.threshold), np.zeros(batch.n_rows, dtype=bool)
@@ -210,6 +238,7 @@ class ControlLoop:
         return IngestResult(
             index,
             batch_id,
+            batch.ids,
             self.champion_version,
             cand_version,
             applied,
@@ -227,7 +256,7 @@ class ControlLoop:
             return cached
         loaded = self.store.payload(index)
         if loaded is None:
-            raise KeyError(index)
+            raise NotFoundError(f"no stored scores for batch {index}")
         champion, candidate = self.store.versions(index)
         arrays = loaded[1]
         return _Scored(champion, arrays["champion_pd"], candidate, arrays.get("candidate_pd"))
@@ -236,13 +265,13 @@ class ControlLoop:
         """Join outcomes to the batch's decision-time scores and run every label-based check."""
         index = self.store.index_of(batch_id)
         if index is None:
-            raise KeyError(f"unknown batch {batch_id!r}")
+            raise NotFoundError(f"unknown batch {batch_id!r}")
         if self.store.has_labels(index):
-            raise ValueError(f"labels for {batch_id!r} were already received")
+            raise ConflictError(f"labels for {batch_id!r} were already received")
         scored = self._scored(index)
         y = np.asarray(labels, dtype=np.int8)
-        if len(y) != len(scored.champion_pd):
-            raise ValueError(f"expected {len(scored.champion_pd)} labels, got {len(y)}")
+        if len(y) != len(scored.champion_pd) or not np.isin(y, (0, 1)).all():
+            raise InvalidInputError(f"expected {len(scored.champion_pd)} labels in {{0, 1}}, got {len(y)}")
         self.store.set_labels(index, y)
         report = None
         own = scored.champion_pd if scored.champion_version == self.champion_version else None
@@ -250,7 +279,7 @@ class ControlLoop:
             own = scored.candidate_pd
         realized = auc(scored.champion_pd, y)
         if own is not None:
-            report = self.monitor.observe_labels(self.now, index, y, own)
+            report = self.monitor.observe_labels(self.now, index, y, own, self._last_timestamp)
             self.store.add_alerts(report.alerts)
         errors = approve(scored.champion_pd, self.champion.model.threshold) == (y == 1)
         brier = float(np.mean((scored.champion_pd - y) ** 2))
@@ -298,7 +327,9 @@ class ControlLoop:
     def start_rollout(self, version: int) -> Rollout:
         """Put a registered version into shadow against the current champion."""
         if self.rollout_active:
-            raise RuntimeError("a rollout is already running")
+            raise ConflictError("a rollout is already running")
+        if self.registry.get(version).stage is not Stage.REGISTERED:
+            raise ConflictError(f"version {version} is not in stage registered")
         bundle: ModelBundle = self.registry.load(version)
         self.registry.transition(version, Stage.SHADOW, "rollout started")
         self.candidate_version, self.candidate = version, bundle
@@ -309,7 +340,7 @@ class ControlLoop:
     def abort_rollout(self, reason: str) -> None:
         """Operator rollback of the running candidate."""
         if not self.rollout_active or self.rollout is None:
-            raise RuntimeError("no rollout is running")
+            raise ConflictError("no rollout is running")
         self.rollout.status, self.rollout.reason = RolloutStatus.ROLLED_BACK, reason
         self._after_rollout("rollback")
 
@@ -397,10 +428,12 @@ class ControlLoop:
             "latest_labelled": self.trigger.latest_labelled,
             "blocked": self.trigger.blocked(self.now),
         }
+        edge = self.monitor.reference.cbpe.lower_bound(self.config.monitor.batch_size)
         return {
             "champion_version": self.champion_version,
             "now": self.now,
             "rollout": rollout,
             "retrain_trigger": trigger,
+            "cbpe_lower_bound": round(edge, 6),
             **self.store.counts(),
         }

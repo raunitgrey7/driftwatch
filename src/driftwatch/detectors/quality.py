@@ -64,7 +64,8 @@ class QualityProfile:
             medians[spec.name] = float(np.median(present))
             lo, hi = np.quantile(present, [0.0005, 0.9995])
             span = max(float(hi - lo), 1e-9)
-            ranges[spec.name] = (float(lo - 0.25 * span), float(hi + 0.25 * span))
+            floor = 0.0 if present.min() >= 0 else -np.inf
+            ranges[spec.name] = (float(max(lo - 0.25 * span, floor)), float(hi + 0.25 * span))
         return cls(null_rates, medians, ranges)
 
 
@@ -94,11 +95,10 @@ def _null_signal(name: str, nulls: int, n: int, ref_rate: float, cfg: QualityCon
 
 
 def _unit_factor(ratio: float, tolerance: float) -> float | None:
-    for factor in UNIT_FACTORS:
-        for candidate in (factor, 1.0 / factor):
-            if abs(math.log(ratio / candidate)) < math.log1p(tolerance):
-                return candidate
-    return None
+    """The conversion factor closest to ``ratio`` in log terms, if one is within the tolerance."""
+    candidates = [c for f in UNIT_FACTORS for c in (f, 1.0 / f)]
+    best = min(candidates, key=lambda c: abs(math.log(ratio / c)))
+    return best if abs(math.log(ratio / best)) < math.log1p(tolerance) else None
 
 
 def _numeric_signals(name: str, values: np.ndarray, profile: QualityProfile, cfg: QualityConfig) -> list[Signal]:

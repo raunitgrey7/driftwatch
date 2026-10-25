@@ -47,7 +47,11 @@ max-statements = 60
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra"
-filterwarnings = ["ignore::DeprecationWarning"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore:ks_2samp. Exact calculation unsuccessful:RuntimeWarning",
+    "ignore:Using `httpx` with `starlette.testclient`",
+]
 
 [tool.uv]
 default-groups = ["dev"]

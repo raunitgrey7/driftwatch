@@ -137,8 +137,12 @@ def concat_batches(batches: Sequence[Batch]) -> Batch:
 
 
 def records_to_columns(records: Sequence[Mapping[str, Any]]) -> dict[str, list[Any]]:
-    """Turn JSON records into columns; a key missing from a record becomes ``None``."""
-    keys: dict[str, None] = {}
+    """Turn JSON records into columns; a key missing from a record becomes ``None``.
+
+    The id column is always present, so the row count survives even when the
+    records carry no fields at all.
+    """
+    keys: dict[str, None] = {ID_COLUMN: None}
     for record in records:
         keys.update(dict.fromkeys(record))
     return {key: [record.get(key) for record in records] for key in keys}
@@ -195,12 +199,8 @@ def coerce(raw: Mapping[str, Any]) -> tuple[Batch, list[SchemaIssue]]:
         raise ValueError(f"columns have different lengths: {sorted(lengths)}")
     n = lengths.pop() if lengths else 0
     issues: list[SchemaIssue] = []
-    ids = raw.get(ID_COLUMN)
-    ids_array = (
-        np.array([str(i) for i in np.asarray(ids, dtype=object).tolist()], dtype=object)
-        if ids is not None
-        else np.array([f"row-{i}" for i in range(n)], dtype=object)
-    )
+    given = np.asarray(raw[ID_COLUMN], dtype=object).tolist() if ID_COLUMN in raw else [None] * n
+    ids_array = np.array([f"row-{i}" if v is None else str(v) for i, v in enumerate(given)], dtype=object)
     for column in raw:
         if column != ID_COLUMN and column not in FEATURE_INDEX:
             issues.append(SchemaIssue("unexpected_column", column, "column is not part of the schema", 1.0))
