@@ -1,0 +1,25 @@
+# The API on port 8774 with a persistent volume. The replay service plays the
+# upstream systems (applications, then outcomes 30 batches later) and only
+# starts with the demo profile: docker compose --profile demo up
+services:
+  api:
+    build: .
+    image: driftwatch:local
+    ports:
+      - "8774:8774"
+    environment:
+      APP_API_KEY: ${APP_API_KEY:-}
+      DRIFTWATCH_AUTO_RETRAIN: "true"
+    volumes:
+      - driftwatch-data:/app/data
+  replay:
+    image: driftwatch:local
+    profiles: ["demo"]
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      APP_API_KEY: ${APP_API_KEY:-}
+    command: ["driftwatch", "replay", "--api", "http://api:8774", "--scenario", "concept_abrupt", "--batches", "200", "--onset", "40", "--interval", "0.5"]
+volumes:
+  driftwatch-data:
