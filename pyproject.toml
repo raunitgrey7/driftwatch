@@ -1,0 +1,53 @@
+[project]
+name = "driftwatch"
+version = "0.1.0"
+description = "Model monitoring and safe deployment for a credit-scoring model: drift detectors, label-free performance estimation, a model registry with lineage, and canary rollout with statistical guardrails."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.162",
+    "httpx>=0.28",
+    "numpy>=2.5",
+    "pydantic>=2.14",
+    "scikit-learn>=1.9",
+    "scipy>=1.18",
+    "threadpoolctl>=3.7",
+    "uvicorn[standard]>=0.54",
+]
+
+[project.scripts]
+driftwatch = "driftwatch.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.170",
+    "pytest>=9.1",
+    "ruff>=0.17",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM", "RUF", "ANN", "N", "C4", "PIE", "RET", "ARG", "PL"]
+ignore = ["ANN401", "RUF012", "B008", "E501", "PLR0913", "PLR2004", "PLR0911", "PLR0912", "PLR0915", "PLR0917"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN", "ARG", "PLC0415"]
+
+[tool.ruff.lint.pylint]
+max-statements = 60
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.uv]
+default-groups = ["dev"]
