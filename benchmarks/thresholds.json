@@ -1,0 +1,328 @@
+{
+ "rules": [
+  {
+   "metric": "control.batches",
+   "op": ">=",
+   "value": 10000,
+   "why": "false alarms must be measured on at least 10,000 drift-free batches"
+  },
+  {
+   "metric": "control.false_alarms_per_10k",
+   "op": "<=",
+   "value": 5.0,
+   "why": "at most one false alert per 2,000 daily batches"
+  },
+  {
+   "metric": "detection.covariate_abrupt.recall",
+   "op": ">=",
+   "value": 0.95,
+   "why": "abrupt, large changes must always be caught"
+  },
+  {
+   "metric": "detection.dq_nulls.recall",
+   "op": ">=",
+   "value": 0.95,
+   "why": "abrupt, large changes must always be caught"
+  },
+  {
+   "metric": "detection.dq_unit_change.recall",
+   "op": ">=",
+   "value": 0.95,
+   "why": "abrupt, large changes must always be caught"
+  },
+  {
+   "metric": "detection.dq_schema_break.recall",
+   "op": ">=",
+   "value": 0.95,
+   "why": "abrupt, large changes must always be caught"
+  },
+  {
+   "metric": "detection.dq_new_category.recall",
+   "op": ">=",
+   "value": 0.95,
+   "why": "abrupt, large changes must always be caught"
+  },
+  {
+   "metric": "detection.covariate_gradual.recall",
+   "op": ">=",
+   "value": 0.9,
+   "why": "every modelled drift type must be caught within the window"
+  },
+  {
+   "metric": "detection.prior_shift.recall",
+   "op": ">=",
+   "value": 0.9,
+   "why": "every modelled drift type must be caught within the window"
+  },
+  {
+   "metric": "detection.concept_abrupt.recall",
+   "op": ">=",
+   "value": 0.9,
+   "why": "every modelled drift type must be caught within the window"
+  },
+  {
+   "metric": "detection.concept_gradual.recall",
+   "op": ">=",
+   "value": 0.9,
+   "why": "every modelled drift type must be caught within the window"
+  },
+  {
+   "metric": "detection.covariate_subtle.recall",
+   "op": ">=",
+   "value": 0.8,
+   "why": "a 30 percent shift should still be caught most of the time"
+  },
+  {
+   "metric": "detection.covariate_abrupt.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.covariate_abrupt.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.covariate_gradual.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.covariate_gradual.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.covariate_subtle.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.covariate_subtle.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.prior_shift.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.prior_shift.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.concept_abrupt.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.concept_abrupt.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.concept_gradual.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.concept_gradual.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.dq_nulls.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.dq_nulls.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.dq_unit_change.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.dq_unit_change.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.dq_schema_break.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.dq_schema_break.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.dq_new_category.precision",
+   "op": ">=",
+   "value": 0.8,
+   "why": "alerts before the onset are false alarms"
+  },
+  {
+   "metric": "detection.dq_new_category.diagnosis_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "the first alert must name the right kind of problem"
+  },
+  {
+   "metric": "detection.dq_nulls.delay_median",
+   "op": "<=",
+   "value": 1,
+   "why": "a broken pipeline must alert on the batch it breaks"
+  },
+  {
+   "metric": "detection.dq_unit_change.delay_median",
+   "op": "<=",
+   "value": 1,
+   "why": "a broken pipeline must alert on the batch it breaks"
+  },
+  {
+   "metric": "detection.dq_schema_break.delay_median",
+   "op": "<=",
+   "value": 1,
+   "why": "a broken pipeline must alert on the batch it breaks"
+  },
+  {
+   "metric": "detection.dq_new_category.delay_median",
+   "op": "<=",
+   "value": 1,
+   "why": "a broken pipeline must alert on the batch it breaks"
+  },
+  {
+   "metric": "detection.covariate_abrupt.delay_median",
+   "op": "<=",
+   "value": 3,
+   "why": "label-free detectors must see an abrupt population change within days"
+  },
+  {
+   "metric": "detection.concept_abrupt.delay_median",
+   "op": "<=",
+   "value": 45,
+   "why": "label delay is 30 batches; detection within 15 batches of the first late labels"
+  },
+  {
+   "metric": "detection.prior_shift.delay_median",
+   "op": "<=",
+   "value": 45,
+   "why": "same budget as concept drift: label-based"
+  },
+  {
+   "metric": "estimation.control.auc_change_cbpe",
+   "op": "<=",
+   "value": 0.01,
+   "why": "on stationary data the estimated AUC change must stay near zero"
+  },
+  {
+   "metric": "estimation.covariate_abrupt.auc_change_cbpe",
+   "op": "<=",
+   "value": 0.015,
+   "why": "under covariate shift CBPE must track the AUC change"
+  },
+  {
+   "metric": "estimation.covariate_gradual.auc_change_cbpe",
+   "op": "<=",
+   "value": 0.015,
+   "why": "under covariate shift CBPE must track the AUC change"
+  },
+  {
+   "metric": "deployment.bad_rollback_rate",
+   "op": ">=",
+   "value": 0.99,
+   "why": "every planted bad release must be rolled back"
+  },
+  {
+   "metric": "deployment.false_rollback_rate",
+   "op": "<=",
+   "value": 0.2,
+   "why": "routine retrains must usually reach production"
+  },
+  {
+   "metric": "deployment.registry_correct_rate",
+   "op": ">=",
+   "value": 0.9,
+   "why": "the registry must end in the right state"
+  },
+  {
+   "metric": "deployment.inverted_score.exposure_median",
+   "op": "<=",
+   "value": 0,
+   "why": "gross defects must be caught in shadow, before any application is decided"
+  },
+  {
+   "metric": "deployment.unit_bug.exposure_median",
+   "op": "<=",
+   "value": 0,
+   "why": "gross defects must be caught in shadow, before any application is decided"
+  },
+  {
+   "metric": "deployment.miscalibrated.exposure_median",
+   "op": "<=",
+   "value": 0,
+   "why": "gross defects must be caught in shadow, before any application is decided"
+  },
+  {
+   "metric": "deployment.crash_5pct.exposure_median",
+   "op": "<=",
+   "value": 0,
+   "why": "gross defects must be caught in shadow, before any application is decided"
+  },
+  {
+   "metric": "retraining.gate_correct_rate",
+   "op": ">=",
+   "value": 0.8,
+   "why": "gate decisions judged against the truly better model"
+  },
+  {
+   "metric": "retraining.control.triggered_retrains_per_run",
+   "op": "<=",
+   "value": 0.2,
+   "why": "no retraining without drift"
+  },
+  {
+   "metric": "retraining.dq_unit_change.triggered_retrains_per_run",
+   "op": "<=",
+   "value": 0.0,
+   "why": "pipeline incidents must block retraining"
+  },
+  {
+   "metric": "retraining.concept_abrupt.true_auc_lift_after_promotion_mean",
+   "op": ">=",
+   "value": 0.03,
+   "why": "retraining must recover ranking after concept drift"
+  },
+  {
+   "metric": "retraining.prior_shift.true_logloss_gain_after_promotion_mean",
+   "op": ">=",
+   "value": 0.0,
+   "why": "retraining must not make calibration worse after prior shift"
+  }
+ ]
+}

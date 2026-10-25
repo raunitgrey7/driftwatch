@@ -201,12 +201,17 @@ class Monitor:
         return signals, {r.feature: r.psi for r in results}, {r.feature: r.p_value for r in results}, mmd_p
 
     def observe(
-        self, index: int, data: dict[str, Any] | Batch, timestamp: str = "", scores: np.ndarray | None = None
+        self,
+        index: int,
+        data: dict[str, Any] | Batch,
+        timestamp: str = "",
+        scores: np.ndarray | None = None,
+        issues: list[SchemaIssue] | None = None,
     ) -> BatchReport:
-        """Evaluate one unlabelled batch (raw columns or an already coerced batch)."""
-        issues: list[SchemaIssue] = []
-        batch = data if isinstance(data, Batch) else None
-        if batch is None:
+        """Evaluate one unlabelled batch: raw columns, or a coerced batch with its schema issues."""
+        if isinstance(data, Batch):
+            batch, issues = data, list(issues or [])
+        else:
             batch, issues = coerce(data)
         signals = schema_signals(issues) + quality_signals(batch, self.reference.quality, self.config.quality)
         drift, psi_values, drift_p, mmd_p = self._drift_signals(batch)

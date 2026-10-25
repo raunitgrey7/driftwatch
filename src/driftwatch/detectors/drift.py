@@ -164,6 +164,13 @@ class MMDDetector:
     n_boot: int = 400
     _null: dict[int, tuple[float, float]] = field(default_factory=dict)
 
+    def _standardise(self, batch: Batch) -> np.ndarray:
+        x = self._matrix(batch)
+        return (np.where(np.isnan(x), self.fill, x) - self.center) / self.scale
+
+    def _embed(self, z: np.ndarray) -> np.ndarray:
+        return np.sqrt(2.0 / self.omega.shape[1]) * np.cos(z @ self.omega + self.phase)
+
     @staticmethod
     def _matrix(batch: Batch) -> np.ndarray:
         cols = [
@@ -171,12 +178,6 @@ class MMDDetector:
             for n in NUMERIC_FEATURES
         ]
         return np.column_stack(cols)
-
-    def _features(self, batch: Batch) -> np.ndarray:
-        x = self._matrix(batch)
-        x = np.where(np.isnan(x), self.fill, x)
-        z = (x - self.center) / self.scale
-        return np.sqrt(2.0 / self.omega.shape[1]) * np.cos(z @ self.omega + self.phase)
 
     @classmethod
     def fit(cls, anchor: Batch, pool: Batch, *, n_features: int = 128, seed: int = 0) -> MMDDetector:
@@ -193,22 +194,27 @@ class MMDDetector:
         omega = rng.standard_normal((z.shape[1], n_features)) / bandwidth
         phase = rng.uniform(0.0, 2.0 * np.pi, n_features)
         detector = cls(center, scale, fill, omega, phase, np.empty(0), np.empty((0, 0)), seed)
-        detector.anchor = detector._features(anchor).mean(axis=0)
-        detector.pool = detector._features(pool)
+        detector.anchor = detector._embed(z).mean(axis=0)
+        detector.pool = detector._standardise(pool).astype(np.float32)
         return detector
 
     def statistic(self, batch: Batch) -> float:
-        diff = self._features(batch).mean(axis=0) - self.anchor
+        diff = self._embed(self._standardise(batch)).mean(axis=0) - self.anchor
         return float(diff @ diff)
 
     def null(self, n: int) -> tuple[float, float]:
-        """Gamma fit of the statistic for clean batches of size ``n``, cached per size."""
+        """Gamma fit of the statistic for clean batches of size ``n``, cached per size.
+
+        The pool is kept as standardised rows (small enough to ship inside a
+        registry artifact) and embedded only when a new batch size is seen.
+        """
         if n not in self._null:
             rng = np.random.default_rng([self.seed, n])
+            embedded = self._embed(self.pool.astype(np.float64))
             stats = np.empty(self.n_boot)
             for start in range(0, self.n_boot, 25):
-                draws = rng.integers(0, len(self.pool), size=(min(25, self.n_boot - start), n))
-                diffs = self.pool[draws].mean(axis=1) - self.anchor
+                draws = rng.integers(0, len(embedded), size=(min(25, self.n_boot - start), n))
+                diffs = embedded[draws].mean(axis=1) - self.anchor
                 stats[start : start + len(draws)] = np.einsum("ij,ij->i", diffs, diffs)
             self._null[n] = gamma_fit(stats)
         return self._null[n]

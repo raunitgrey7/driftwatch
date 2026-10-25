@@ -46,16 +46,21 @@ def approve(pd: np.ndarray, threshold: float) -> np.ndarray:
     return pd < threshold
 
 
+MODEL_FEATURES: tuple[str, ...] = (*NUMERIC_FEATURES, *CATEGORICAL_FEATURES)
+
+
 def encode(batch: Batch, dropped: tuple[str, ...] = ()) -> np.ndarray:
-    """Feature matrix in schema order; categories become codes, unknown or null become NaN."""
-    columns = [batch.numeric[name] for name in NUMERIC_FEATURES]
-    for name in CATEGORICAL_FEATURES:
-        codes = batch.codes(name)
-        columns.append(np.where(codes >= 0, codes, np.nan))
-    matrix = np.column_stack(columns).astype(np.float64)
-    for name in dropped:
-        matrix[:, (*NUMERIC_FEATURES, *CATEGORICAL_FEATURES).index(name)] = np.nan
-    return matrix
+    """Feature matrix in schema order without ``dropped``; categories become codes, unknown or null NaN."""
+    columns = []
+    for name in MODEL_FEATURES:
+        if name in dropped:
+            continue
+        if name in batch.numeric:
+            columns.append(batch.numeric[name])
+        else:
+            codes = batch.codes(name)
+            columns.append(np.where(codes >= 0, codes, np.nan))
+    return np.column_stack(columns).astype(np.float64)
 
 
 def _logit(p: np.ndarray) -> np.ndarray:
