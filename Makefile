@@ -28,7 +28,7 @@ serve:
 	$(UV) run driftwatch serve --host 127.0.0.1 --port $(PORT)
 
 replay:
-	$(UV) run driftwatch replay --api http://127.0.0.1:$(PORT) --scenario covariate_abrupt --batches 180
+	$(UV) run driftwatch replay --api http://127.0.0.1:$(PORT) --scenario concept_abrupt --batches 200 --onset 40
 
 docker-build:
 	docker build -t driftwatch:local .

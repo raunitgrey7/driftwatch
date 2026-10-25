@@ -23,7 +23,7 @@ from __future__ import annotations
 import math
 import tempfile
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -68,6 +68,7 @@ class GateRecord:
     challenger_auc: float
     should_promote: bool
     correct: bool
+    challenger: str
 
 
 @dataclass
@@ -116,7 +117,9 @@ def judge_gate(task: RetrainTask, registry: ModelRegistry, outcome: RetrainOutco
     acceptable = ll_chall < ll_champ + ACCEPT_LOSS and auc_chall > auc_champ - AUC_SLACK
     promote = outcome.decision.promote
     correct = acceptable if promote else not should
-    return GateRecord(outcome.at, forced, promote, ll_champ, ll_chall, auc_champ, auc_chall, should, correct)
+    return GateRecord(
+        outcome.at, forced, promote, ll_champ, ll_chall, auc_champ, auc_chall, should, correct, outcome.challenger
+    )
 
 
 def run_retrain(task: RetrainTask) -> RetrainSummary:
@@ -191,6 +194,9 @@ def retrain_metrics(summaries: list[RetrainSummary]) -> dict[str, object]:
             "batches_onset_to_production_median": _onset_to_production(promoted),
             "true_auc_lift_after_promotion_mean": _mean(lifts),
             "true_logloss_gain_after_promotion_mean": _mean(gains),
+            "promoted_challengers": dict(
+                sorted(Counter(g.challenger for g in triggered + forced if g.promote).items())
+            ),
         }
     gates = [g for s in summaries for g in s.gates]
     pooled = {

@@ -27,10 +27,19 @@ import sklearn
 from threadpoolctl import threadpool_limits
 
 from driftwatch.bench.config import DRIFT_SCENARIOS, RETRAIN_SCENARIOS, BenchConfig
-from driftwatch.bench.deployment import RolloutSummary, RolloutTask, rollout_metrics, run_rollout
-from driftwatch.bench.detection import NEVER, StreamSummary, StreamTask, control_metrics, drift_metrics, run_stream
+from driftwatch.bench.deployment import RolloutSummary, RolloutTask, rollout_metrics, run_rollout, truth_sample
+from driftwatch.bench.detection import (
+    NEVER,
+    StreamSummary,
+    StreamTask,
+    champion_for,
+    control_metrics,
+    drift_metrics,
+    run_stream,
+)
 from driftwatch.bench.releases import BAD, GOOD
 from driftwatch.bench.retraining import RetrainSummary, RetrainTask, retrain_metrics, run_retrain
+from driftwatch.stats import auc, expected_auc
 
 Task = StreamTask | RolloutTask | RetrainTask
 Summary = StreamSummary | RolloutSummary | RetrainSummary
@@ -145,6 +154,37 @@ def environment() -> dict[str, Any]:
     }
 
 
+def champion_summary(cfg: BenchConfig) -> dict[str, Any]:
+    """The reference model's own quality: realised and noise-free AUC, calibration, cut-off."""
+    with threadpool_limits(1):
+        champion = champion_for(cfg.history)
+        truth = truth_sample(cfg.history.seed + 9_001, 20, cfg.batch_size)
+        holdout_pd = champion.model.predict_pd(champion.holdout.batch)
+        truth_pd = champion.model.predict_pd(truth.batch)
+    return {
+        "train_rows": champion.model.info["n_train"],
+        "calibration_rows": champion.model.info["n_calib"],
+        "boosting_iterations": champion.model.info["iterations"],
+        "holdout_rows": champion.holdout.batch.n_rows,
+        "holdout_auc": round(auc(holdout_pd, champion.holdout.labels), 6),
+        "true_auc_fresh_sample": round(expected_auc(truth_pd, truth.true_pd), 6),
+        "mean_pd_fresh_sample": round(float(truth_pd.mean()), 6),
+        "true_default_rate_fresh_sample": round(float(truth.true_pd.mean()), 6),
+        "approval_cutoff_pd": round(champion.model.threshold, 6),
+        "approval_rate_fresh_sample": round(float(np.mean(truth_pd < champion.model.threshold)), 6),
+        "calibration_deciles": calibration_deciles(truth_pd, truth.true_pd),
+    }
+
+
+def calibration_deciles(pd: np.ndarray, true_pd: np.ndarray) -> list[dict[str, float]]:
+    """Mean predicted and mean true PD per decile of the predicted PD (a reliability table)."""
+    order = np.argsort(pd, kind="mergesort")
+    return [
+        {"mean_pd": round(float(pd[part].mean()), 4), "mean_true_pd": round(float(true_pd[part].mean()), 4)}
+        for part in np.array_split(order, 10)
+    ]
+
+
 def run_benchmark(cfg: BenchConfig) -> dict[str, Any]:
     """Run every section and return the full results document."""
     started = time.perf_counter()
@@ -158,6 +198,7 @@ def run_benchmark(cfg: BenchConfig) -> dict[str, Any]:
     results: dict[str, Any] = {
         "config": asdict(cfg),
         "environment": environment(),
+        "champion": champion_summary(cfg),
         "detection": {"control": control_metrics(control), "drift": drift_metrics(drifted, cfg.detection_window)},
         "deployment": rollout_metrics(rollouts),
         "retraining": retrain_metrics(retrains),
@@ -178,6 +219,9 @@ def headline(results: dict[str, Any]) -> dict[str, float | None]:
     """Flat ``section.name.metric`` view used by the threshold gate and the README table."""
     out: dict[str, float | None] = {}
     control = results["detection"]["control"]
+    for key, value in results["champion"].items():
+        if isinstance(value, int | float):
+            out[f"champion.{key}"] = value
     out["control.false_alarms_per_10k"] = control["false_alarms_per_10k"]
     out["control.batches"] = control["batches"]
     for name, metrics in results["detection"]["drift"].items():
@@ -195,5 +239,6 @@ def headline(results: dict[str, Any]) -> dict[str, float | None]:
     out["retraining.gate_correct_rate"] = results["retraining"]["pooled"]["gate_correct_rate"]
     for name, metrics in results["retraining"]["per_scenario"].items():
         for key, value in metrics.items():
-            out[f"retraining.{name}.{key}"] = value
+            if value is None or isinstance(value, int | float):
+                out[f"retraining.{name}.{key}"] = value
     return out
