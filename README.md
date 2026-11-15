@@ -11,7 +11,7 @@ When drift is confirmed it retrains, and a champion-challenger gate decides
 whether the challenger is worth rolling out.
 
 Everything runs on a laptop CPU with no API key and no network at runtime:
-Python 3.13, `uv`, scikit-learn, scipy, FastAPI, SQLite.
+Python 3.12 or newer, `uv`, scikit-learn, scipy, FastAPI, SQLite.
 
 ## Why
 
@@ -69,7 +69,7 @@ reproduce the numbers.
 ## Quickstart
 
 ```
-make setup        # uv sync (Python 3.13, runtime and dev dependencies)
+make setup        # uv sync (Python 3.12 or newer, runtime and dev dependencies)
 make bench        # all benchmarks plus the threshold gate, a few minutes on 2 worker processes
 make serve        # API and dashboard on http://127.0.0.1:8774
 make replay       # second shell: streams a concept-drift scenario into the service

@@ -3,7 +3,7 @@ name = "driftwatch"
 version = "0.1.0"
 description = "Model monitoring and safe deployment for a credit-scoring model: drift detectors, label-free performance estimation, a model registry with lineage, and canary rollout with statistical guardrails."
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.162",
     "httpx>=0.28",
@@ -31,7 +31,7 @@ dev = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py313"
+target-version = "py312"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
