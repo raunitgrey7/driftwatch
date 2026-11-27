@@ -1,5 +1,8 @@
 # driftwatch
 
+[![ci](https://github.com/raunitgrey7/driftwatch/actions/workflows/ci.yml/badge.svg)](https://github.com/raunitgrey7/driftwatch/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Model monitoring and safe deployment for a credit-scoring model. driftwatch
 watches a production model batch by batch (schema and data-quality checks,
 PSI, KS, chi-square and MMD for data drift, a label-free estimate of today's

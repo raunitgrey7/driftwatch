@@ -328,6 +328,6 @@ The same clone then ran `make serve`, which answered `/health` with
   rollout in progress. One deployment slot; SQLite with a single writer.
 * The dashboard was not viewed in a browser (browser tools were out of
   scope); it is verified only as served and syntactically valid.
-* The optional LLM enhancement the charter allows was not built.
+* No LLM component was built.
 * The docker-compose demo profile was not run, only the image build and a
   container health check.
