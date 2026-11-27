@@ -326,8 +326,9 @@ The same clone then ran `make serve`, which answered `/health` with
   looks.
 * Detector state is in memory; a restart re-learns it and rolls back any
   rollout in progress. One deployment slot; SQLite with a single writer.
-* The dashboard was not viewed in a browser (browser tools were out of
-  scope); it is verified only as served and syntactically valid.
+* The dashboard was verified as served, as syntactically valid and by
+  rendering the loaded page in headless Chrome with no console errors; its
+  buttons were not driven by an automated browser test.
 * No LLM component was built.
 * The docker-compose demo profile was not run, only the image build and a
   container health check.
